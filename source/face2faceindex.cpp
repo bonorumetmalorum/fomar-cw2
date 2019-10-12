@@ -45,7 +45,7 @@ int main(int argc, char **argv){
     //faces index
     vector<int> faces;
 
-    //Vert
+    //Vertex variable
     Vert vert;
 
     for(int i = 0; i < nVertices; i++){
@@ -60,15 +60,36 @@ int main(int argc, char **argv){
         }
     }
 
-    cout << "number of unique vertices: " << vertices.size()  << endl;
+    //cout << "number of unique vertices: " << vertices.size()  << endl;
 
-    for(Vert v : vertices){
-        cout << v.x << " " << v.y << " " << v.z << endl;
+    // for(Vert v : vertices){
+    //     cout << v.x << " " << v.y << " " << v.z << endl;
+    // }
+
+    // cout << "faces: " << endl;
+
+    // for(int j = 0; j < faces.size(); j+=3){
+    //     cout << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
+    // }
+
+    //now to make the file
+    ofstream faceFile;
+    string filename = argv[2];
+    filename.append(".face");
+    faceFile.open(filename);
+    //header content
+    faceFile << "# University of Leeds 2018-2019" << endl
+    << "# COMP 5812M Assignment 2" << endl
+    << "# Govind Venkatesh" << endl
+    << "# 201332107" << endl
+    << "#" << endl
+    << "# Object Name: " << argv[2] << endl
+    << "# Vertices=" << vertices.size() << "Faces=" << faces.size()/3 << endl
+    << "#" << endl;
+    for(int i = 0; i < vertices.size(); i++){
+        faceFile << "Vertex " << i << " " << vertices[i].x << " " << vertices[i].y << " " <<  vertices[i].z << endl;
     }
-
-    cout << "faces: " << endl;
-
     for(int j = 0; j < faces.size(); j+=3){
-        cout << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
+        faceFile << "Face " << j/3 << " " << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
     }
 }
