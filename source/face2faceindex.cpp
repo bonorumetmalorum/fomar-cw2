@@ -84,7 +84,7 @@ int main(int argc, char **argv){
     << "# 201332107" << endl
     << "#" << endl
     << "# Object Name: " << argv[2] << endl
-    << "# Vertices=" << vertices.size() << "Faces=" << faces.size()/3 << endl
+    << "# Vertices=" << vertices.size() << " " << "Faces=" << faces.size()/3 << endl
     << "#" << endl;
     for(int i = 0; i < vertices.size(); i++){
         faceFile << "Vertex " << i << " " << vertices[i].x << " " << vertices[i].y << " " <<  vertices[i].z << endl;
