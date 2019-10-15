@@ -59,6 +59,7 @@ int main(int argc, char **argv){
             faces.push_back(index);
         }
     }
+    triangleSoup.close;
 
     //cout << "number of unique vertices: " << vertices.size()  << endl;
 
@@ -92,4 +93,5 @@ int main(int argc, char **argv){
     for(int j = 0; j < faces.size(); j+=3){
         faceFile << "Face " << j/3 << " " << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
     }
+    faceFile.close();
 }
