@@ -95,17 +95,39 @@ int main(int argc, char **argv){
     // for(Face f : edgeTo){
     //     cout << f.verts[0] << " " << f.verts[1] << " " << f.verts[2] << endl;
     // }
+    vector<int> edgeFrom(hd.faces*3);
+    for(int i = 0; i < hd.faces*3; i++){ //initialise array to -1
+        edgeFrom[i] = -1;
+    }
+    int a, b, c, d;
     for(int i = 0; i < edgeTo.size(); i++){
         //for each face
-        for(int j = 0; j < edgeTo.size(); j++){
-            if(j == i){
-                //skip
-            }else{
-                for(int k = 0; k < 4; k++){
-                    edgeTo
+        for(int j=0; j < 3; j++){
+            //for each edge on this face
+            for(int k=0; k < edgeTo.size(); k++){
+                //for every other face
+                if(k == i){
+                    //same face so do nothing
+                }else{ //different face
+                    for(int l=0; l < 3; l++){
+                        //for every edge on every other face
+                        a = edgeTo[i].verts[j]; b = edgeTo[i].verts[(j+1)%3];//get the end points of the current edgeTo and put them in a, b
+                        c = edgeTo[k].verts[l]; d = edgeTo[k].verts[(l+1)%3];//get the end points of the current edgeFrom and put them in c, d
+                        if((a == d) && (b == c)){//check if a == d and b == c
+                            if(edgeFrom[j*i] == -1){// if yes then insert l*k at index j*i iff j*i == -1
+                                edgeFrom[j*i] = l*k;
+                            }else{// else print j*i and exit (error state)
+                                cout << "incorrect edge: " << j*i << "other half: " << l*k << endl;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-
         }
+    }
+
+    for(int i = 0; i < edgeFrom.size()/3; i++){
+        cout << edgeFrom[i] << " " << edgeFrom[i+1] << " " << edgeFrom[i+2] <<endl;
     }
 }
