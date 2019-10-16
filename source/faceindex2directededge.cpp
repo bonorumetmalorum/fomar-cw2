@@ -92,5 +92,20 @@ int main(int argc, char **argv){
     //     cout << v.x << " " << v.y << " " << v.z << endl;
     // }
     vector<Face> edgeTo = praseEdgeTo(hd, faceFile);
+    // for(Face f : edgeTo){
+    //     cout << f.verts[0] << " " << f.verts[1] << " " << f.verts[2] << endl;
+    // }
+    for(int i = 0; i < edgeTo.size(); i++){
+        //for each face
+        for(int j = 0; j < edgeTo.size(); j++){
+            if(j == i){
+                //skip
+            }else{
+                for(int k = 0; k < 4; k++){
+                    edgeTo
+                }
+            }
 
+        }
+    }
 }
