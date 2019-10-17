@@ -89,6 +89,7 @@ int main(int argc, char **argv){
     // }
     vector<int> faceIndex;
     parseEdgeTo(hd, faceFile, faceIndex);
+    cout << faceIndex.size() << endl;
     // for(int i = 0; i < faceIndex.size(); i++){
     //     cout << faceIndex[i] <<endl;
     // }
@@ -98,17 +99,17 @@ int main(int argc, char **argv){
     }
 
     int a, b, c, d;
-    for(int i = 0; i < faceIndex.size()/3; i++){ // for this face
+    for(int i = 0; i < faceIndex.size(); i+=3){ // for this face
         for(int j = 0; j < 3; j++){//for edges on this face
-            a = faceIndex[i]; b = faceIndex[i+(j%3)]; //current edge
-            for(int k = 0; k < faceIndex.size()/3; k++){//for every other face
+            a = faceIndex[i+j]; b = faceIndex[i+((j+1)%3)]; //current edge
+            for(int k = 0; k < faceIndex.size(); k+=3){//for every other face
                 if(k != i){ // if it is not the current face
                     for(int l = 0; l < 3; l++){//for edges on other face
-                        c = faceIndex[k]; d=faceIndex[k+(l%3)];//current edge on other face
+                        c = faceIndex[k+l]; d=faceIndex[k+((l+1)%3)];//current edge on other face
                         if(a == d && b == c){ // if the edges match
-                            cout << a << b << " -> " << c << d << endl;
-                            if(edgeFrom[i+(j%3)] == -1){// if there is no value assigned
-                                edgeFrom[i+(j%3)] = k+(l%3);
+                            cout << a << " " << b << " -> " << c << " " << d << endl;
+                            if(edgeFrom[i+j] == -1){// if there is no value assigned
+                                edgeFrom[i+j] = k+l;
                             }else{
                                 cout << "error";
                                 return -1;
