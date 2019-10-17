@@ -10,10 +10,6 @@ struct Vert{
     float z = 0;
 };
 
-struct Face{
-    vector<int> verts;
-};
-
 //returns true if two verts are equal, false otherwise
 bool compareVert(Vert &left, Vert &right){
     return left.x == right.x && left.y == right.y && left.z == right.z;
