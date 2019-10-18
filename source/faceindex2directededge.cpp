@@ -78,24 +78,43 @@ void parseEdgeTo(Header &hd, istream &faceFile, vector<int> &outFaceIndex){
     }
 }
 
-string compileHeader(Header &hd){
-
+void compileHeader(ostream &file, Header &hd){
+    file << hd.university << endl
+    << hd.module_assignment << endl
+    << hd.name << endl
+    << hd.candidate_no << endl
+    << "#" << endl
+    << hd.object_name << endl
+    << "# Vertices=" << hd.verts << " " << "Faces=" << hd.faces << endl
+    << "#" << endl;
 }
 
-string compileVertexBlock(vector<Vert> &vertexIndex){
-
+void compileVertexBlock(ostream &file, vector<Vert> &vertexIndex){
+    for(int i = 0; i < vertexIndex.size(); i++){
+        file << "Vertex " << i << " " << vertexIndex[i].x << " " << vertexIndex[i].y << " " <<  vertexIndex[i].z << endl;
+    }
 }
 
-string compileFirstEdgeBlock(vector<int> &firstEdge){
-
+void compileFirstEdgeBlock(ostream &file, vector<int> &firstEdge){
+    for(int i = 0; i < firstEdge.size(); i++){
+        file << "FirstDirectedEdge " << i << " " << firstEdge[i] << endl;
+    }
 }
 
-string compileFacesIndexBlock(vector<int> &facesIndex){
-
+void compileFacesIndexBlock(ostream &file, vector<int> &facesIndex){
+    for(int j = 0; j < facesIndex.size(); j+=3){
+        file << "Face " << j/3 << " " << facesIndex[j] << " " << facesIndex[j+1] << " " << facesIndex[j+2] << endl;
+    }
 }
 
-string compileOtherHalfBlock(vector<int> &otherHalf){
+void compileOtherHalfBlock(ostream &file, vector<int> &otherHalf){
+    for(int i = 0; i < otherHalf.size(); i++){
+        file << "OtherHalf " << i << " " << otherHalf[i] << endl;
+    }
+}
 
+int genus(int v, int e, int f){
+    return (v - e + f - 2)/-2;
 }
 
 int main(int argc, char **argv){
@@ -162,11 +181,14 @@ int main(int argc, char **argv){
     string filename;
     filename.append(hd.object_name).append(".diredge");
     diredge.open(filename); //set up the file
-    diredge << compileHeader(hd);//put the header in
-    diredge << compileVertexBlock(coords);//put the vertex block in
-    diredge << compileFirstEdgeBlock(firstEdge);//put the first edge block in
-    diredge << compileFacesIndexBlock(faceIndex);//put the facesIndex block in
-    diredge << compileOtherHalfBlock(otherHalf);//put the other half block in
+    compileHeader(diredge, hd);//put the header in
+    compileVertexBlock(diredge, coords);//put the vertex block in
+    compileFirstEdgeBlock(diredge, firstEdge);//put the first edge block in
+    compileFacesIndexBlock(diredge, faceIndex);//put the facesIndex block in
+    compileOtherHalfBlock(diredge, otherHalf);//put the other half block in
     diredge.close();//end
+
+    cout << "genus of mesh is: " << genus(hd.verts, (hd.faces*3)/2, hd.faces);
+
     return 0;
 }
