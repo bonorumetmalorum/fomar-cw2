@@ -78,6 +78,25 @@ void parseEdgeTo(Header &hd, istream &faceFile, vector<int> &outFaceIndex){
     }
 }
 
+string compileHeader(Header &hd){
+
+}
+
+string compileVertexBlock(vector<Vert> &vertexIndex){
+
+}
+
+string compileFirstEdgeBlock(vector<int> &firstEdge){
+
+}
+
+string compileFacesIndexBlock(vector<int> &facesIndex){
+
+}
+
+string compileOtherHalfBlock(vector<int> &otherHalf){
+
+}
 
 int main(int argc, char **argv){
     ifstream faceFile;
@@ -93,11 +112,24 @@ int main(int argc, char **argv){
     // for(int i = 0; i < faceIndex.size(); i++){
     //     cout << faceIndex[i] <<endl;
     // }
-    vector<int> edgeFrom(hd.faces*3);
-    for(int i = 0; i < hd.faces*3; i++){ //initialise array to -1
-        edgeFrom[i] = -1;
+
+    vector<int> firstEdge(hd.verts);
+    for(int i = 0; i < hd.verts; i++){//for each unique vertex 
+        for(int j = 0; j < faceIndex.size(); j++){//for every edge find the corresponding vertex i
+            if(faceIndex[j] == i){ //if we have a match add it
+                firstEdge[i] = j;
+            }//otherwise continue
+        }
     }
 
+    // for(int i = 0; i < firstEdge.size(); i++){
+    //     cout << "vertex: " << i << " first edge: " << firstEdge[i] << endl;
+    // }
+
+    vector<int> otherHalf(hd.faces*3);
+    for(int i = 0; i < hd.faces*3; i++){ //initialise array to -1
+        otherHalf[i] = -1;
+    }
     int a, b, c, d;
     for(int i = 0; i < faceIndex.size(); i+=3){ // for this face
         for(int j = 0; j < 3; j++){//for edges on this face
@@ -107,9 +139,9 @@ int main(int argc, char **argv){
                     for(int l = 0; l < 3; l++){//for edges on other face
                         c = faceIndex[k+l]; d=faceIndex[k+((l+1)%3)];//current edge on other face
                         if(a == d && b == c){ // if the edges match
-                            cout << a << " " << b << " -> " << c << " " << d << endl;
-                            if(edgeFrom[i+j] == -1){// if there is no value assigned
-                                edgeFrom[i+j] = k+l;
+                            //cout << a << " " << b << " -> " << c << " " << d << endl;
+                            if(otherHalf[i+j] == -1){// if there is no value assigned
+                                otherHalf[i+j] = k+l;
                             }else{
                                 cout << "error";
                                 return -1;
@@ -117,44 +149,24 @@ int main(int argc, char **argv){
                         }
                     }
                 }
+                //have to check if the value was set, if not there is a missing half edge, we must error here
                 continue;
             }
         }
     }   
-    //over complication due to ds
-    // for(int i = 0; i < edgeTo.size(); i++){
-    //     //for each face
-    //     for(int j=0; j < 3; j++){
-    //         //for each edge on this face
-    //         for(int k=0; k < edgeTo.size(); k++){
-    //             //for every other face
-    //             if(k == i){
-    //                 continue;//same face so do nothing
-    //             }else{ //different face
-    //                 for(int l=0; l < 3; l++){
-    //                     //for every edge on every other face
-    //                     a = edgeTo[i].verts[j]; b = edgeTo[i].verts[(j+1)%3];//get the end points of the current edgeTo and put them in a, b
-    //                     c = edgeTo[k].verts[l]; d = edgeTo[k].verts[(l+1)%3];//get the end points of the current edgeFrom and put them in c, d
-    //                     if((a == d) && (b == c)){//check if a == d and b == c
-    //                         cout << a << " " << b << " -> " << c << " " << d << endl;
-    //                         cout << "insertion at index: " << (j*i) -1 << " j = " << j << " i = " << i <<  endl;
-    //                         if(edgeFrom[j+i] == -1){// if yes then insert l*k at index j*i iff j*i == -1
-    //                             edgeFrom[(j*i)-1] = (l*k)-1;
-    //                             break;
-    //                         }else{// else print j*i and exit (error state)
-    //                             cout << "incorrect edge: " << (j*i)-1 << "other half: " << (l*k)-1 << endl;
-    //                             return -1;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-
-
-    // for(int i = 0; i < edgeFrom.size(); i++){
+    // for(int i = 0; i < edgeFrom.size(); i+=3){
     //     cout << edgeFrom[i] << " " << edgeFrom[i+1] << " " << edgeFrom[i+2] <<endl;
     // }
+
+    ofstream diredge;
+    string filename;
+    filename.append(hd.object_name).append(".diredge");
+    diredge.open(filename); //set up the file
+    diredge << compileHeader(hd);//put the header in
+    diredge << compileVertexBlock(coords);//put the vertex block in
+    diredge << compileFirstEdgeBlock(firstEdge);//put the first edge block in
+    diredge << compileFacesIndexBlock(faceIndex);//put the facesIndex block in
+    diredge << compileOtherHalfBlock(otherHalf);//put the other half block in
+    diredge.close();//end
+    return 0;
 }
