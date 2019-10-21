@@ -114,7 +114,61 @@ void compileOtherHalfBlock(ostream &file, vector<int> &otherHalf){
 }
 
 int genus(int v, int e, int f){
-    return (v - e + f - 2)/-2;
+    int g = (v - e + f - 2)/-2;
+    if(g < 0){
+        return 0;
+    }
+    return g;
+}
+
+int getPrevious(int index){
+    int value;
+    cout << index%3 << endl;
+    switch(index%3){
+        case 0: //first edge of face
+            value = index + 2; //previous edge is last edge of face
+            break;
+        case 1: //second edge of face
+            value =  index - 1; //previous edge is first edge of face
+            break;
+        case 2: //third edge of face
+            value = index - 1; //previous edge is second edge of face
+            break;
+    }
+    cout << value << endl;
+    return value;
+}
+
+bool pinchPoints(vector<Vert> &verts, vector<int> faceIndex, vector<int> &firstEdge, vector<int> &otherHalf){
+    for(int vertex = 0; vertex < verts.size(); vertex++){//for the current vertex
+        //first we want to determine how many times this vertex appears in edges
+        int sumOccurence = 0; //how many edges have this vertex
+        for(int i = 0; i < faceIndex.size(); i++){ //for every edge
+            if(faceIndex[i] == vertex){ //if this is the vertex we're looking for
+                sumOccurence++; //increment since this edge starts with it
+            }
+        }
+        cout << "occurences of vertex " << vertex << ": " << sumOccurence << endl;
+        int first = firstEdge[vertex];
+        int currentEdge = first;//find first edge index
+        int nextEdge = getPrevious(currentEdge);
+        int counter = 1;
+        cout << currentEdge << nextEdge << otherHalf[nextEdge] << endl;
+        while(otherHalf[nextEdge] != first){ //while there are more edges to cycle through
+            cout << "First edge: " << first << endl;
+            cout << "currentEdge: " << currentEdge << " nextEdge: " << nextEdge << endl;
+            currentEdge = otherHalf[nextEdge];//find other side of last edge to get first edge of next face
+            nextEdge = getPrevious(currentEdge);
+            counter++; //increment the counter since we have not reached the end of the cycle
+        }
+        cout << "count: " << counter << endl;
+        if(counter < sumOccurence){// if this number is less than the number of edges containg this vertex, we have a pinch point
+            return true;
+        }
+    }
+
+    return false;
+    
 }
 
 int main(int argc, char **argv){
@@ -162,7 +216,7 @@ int main(int argc, char **argv){
                             if(otherHalf[i+j] == -1){// if there is no value assigned
                                 otherHalf[i+j] = k+l;
                             }else{
-                                cout << "error";
+                                cout << "error not manifold: CurrentEdge = " << a << " " << b << endl;
                                 return -1;
                             }
                         }
@@ -171,11 +225,18 @@ int main(int argc, char **argv){
                 //have to check if the value was set, if not there is a missing half edge, we must error here
                 continue;
             }
+            if(otherHalf[i+j] == -1){
+                cout << "error not manifold, did not find a half edge for edge: " << i+j << " (" << a << " " << b << ")" << endl;
+                return -1;
+            }
         }
     }   
     // for(int i = 0; i < edgeFrom.size(); i+=3){
     //     cout << edgeFrom[i] << " " << edgeFrom[i+1] << " " << edgeFrom[i+2] <<endl;
     // }
+
+    bool pinch = pinchPoints(coords, faceIndex, firstEdge, otherHalf);
+    cout << "are there any pinch points: " << pinch << endl;
 
     ofstream diredge;
     string filename;
