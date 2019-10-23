@@ -4,29 +4,13 @@
 
 using namespace std;
 
-// void parseHeader(istream &faceFile){
-//     string buffer;
-//     faceFile >> buffer;
-//     buffer 
-// }
-
-/*
-# University of Leeds 2018-2019
-# COMP 5812M Assignment 2
-# Govind Venkatesh
-# 201332107
-#
-# Object Name: 2ballout
-# Vertices=12 Faces=16
-# 
-*/
 
 struct Header{
     string university;
     string module_assignment;
     string name;
     string candidate_no;
-    string object_name;
+    char object_name[50];
     int verts, faces;
 };
 
@@ -43,7 +27,9 @@ Header parseHeader(ifstream &faceFile){
     getline(faceFile, hd.name);
     getline(faceFile, hd.candidate_no);
     faceFile.ignore(2, '\n');
-    getline(faceFile, hd.object_name);
+    string name;
+    getline(faceFile, name);
+    sscanf(name.c_str(), "# Object Name: %s", hd.object_name);
     string verticesAndFaces;
     getline(faceFile, verticesAndFaces);
     cout << hd.object_name << endl;
@@ -84,7 +70,7 @@ void compileHeader(ostream &file, Header &hd){
     << hd.name << endl
     << hd.candidate_no << endl
     << "#" << endl
-    << hd.object_name << endl
+    << "# Object Name: " << hd.object_name << endl
     << "# Vertices=" << hd.verts << " " << "Faces=" << hd.faces << endl
     << "#" << endl;
 }
