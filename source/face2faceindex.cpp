@@ -15,6 +15,7 @@ bool compareVert(Vert &left, Vert &right){
     return left.x == right.x && left.y == right.y && left.z == right.z;
 }
 
+//time complexity: O(n)
 //returns the index of the matching vertex, otherwise -1
 int findVertex(Vert &vertex, vector<Vert> &verts){
     int size = verts.size();
@@ -43,7 +44,8 @@ int main(int argc, char **argv){
 
     //Vertex variable
     Vert vert;
-
+    
+    //time complexity: O(n^2)
     for(int i = 0; i < nVertices; i++){
         triangleSoup >> vert.x >> vert.y >> vert.z;
         //check if the vertex is already in the array
@@ -69,7 +71,7 @@ int main(int argc, char **argv){
     //     cout << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
     // }
 
-    //now to make the file
+    //make the file
     ofstream faceFile;
     string filename = argv[2];
     filename.append(".face");
