@@ -57,7 +57,7 @@ int main(int argc, char **argv){
             faces.push_back(index);
         }
     }
-    triangleSoup.close;
+    triangleSoup.close();
 
     //cout << "number of unique vertices: " << vertices.size()  << endl;
 
