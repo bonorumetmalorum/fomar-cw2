@@ -48,7 +48,11 @@ vector<Vert> parseCoords(Header &hd, istream &faceFile){
     for(int i = 0; i < hd.verts; i++){
         getline(faceFile, buf);
         sscanf(buf.c_str(), "Vertex %d %f %f %f", &index, &x, &y, &z);
-        coords[i] = Vert{x,y,x};
+        Vert vert;
+        vert.x = x;
+        vert.y = y;
+        vert.z = z;
+        coords[i] = vert;
     }
     return coords;
 }
