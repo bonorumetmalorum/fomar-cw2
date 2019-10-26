@@ -215,15 +215,10 @@ int main(int argc, char **argv){
     faceFile.open(argv[1]);
     Header hd = parseHeader(faceFile);
     vector<Vert> coords = parseCoords(hd, faceFile);
-    // for(Vert v : coords){
-    //     cout << v.x << " " << v.y << " " << v.z << endl;
-    // }
+
     vector<int> faceIndex;
     parseEdgeTo(hd, faceFile, faceIndex);
     cout << faceIndex.size() << endl;
-    // for(int i = 0; i < faceIndex.size(); i++){
-    //     cout << faceIndex[i] <<endl;
-    // }
 
     vector<int> firstEdge(hd.verts);
     for(int i = 0; i < hd.verts; i++){//for each unique vertex 
@@ -234,18 +229,11 @@ int main(int argc, char **argv){
         }
     }
 
-    // for(int i = 0; i < firstEdge.size(); i++){
-    //     cout << "vertex: " << i << " first edge: " << firstEdge[i] << endl;
-    // }
-
     vector<int> outOtherHalf(hd.faces*3);
     int success = otherHalf(outOtherHalf, hd, faceIndex);
     if(success == -1){ //if we have failed to create the otherHalf index
         return -1; //terminate
     }
-    // for(int i = 0; i < edgeFrom.size(); i+=3){
-    //     cout << edgeFrom[i] << " " << edgeFrom[i+1] << " " << edgeFrom[i+2] <<endl;
-    // }
 
     int pinch = pinchPoints(coords, faceIndex, firstEdge, outOtherHalf);
     if(pinch != -1){

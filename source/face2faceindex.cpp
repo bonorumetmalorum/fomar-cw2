@@ -59,18 +59,6 @@ int main(int argc, char **argv){
     }
     triangleSoup.close();
 
-    //cout << "number of unique vertices: " << vertices.size()  << endl;
-
-    // for(Vert v : vertices){
-    //     cout << v.x << " " << v.y << " " << v.z << endl;
-    // }
-
-    // cout << "faces: " << endl;
-
-    // for(int j = 0; j < faces.size(); j+=3){
-    //     cout << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
-    // }
-
     //make the file
     ofstream faceFile;
     string filename = argv[2];
