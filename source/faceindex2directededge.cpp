@@ -196,7 +196,7 @@ bool pinchPoints(vector<Vert> &verts, vector<int> faceIndex, vector<int> &firstE
     return false;
 }
 
-//time complexity: No. faces * (3 * ((No. faces - 1)*3)) = O(n^4) since i have to go through every face and every edge for every face and every edge
+//time complexity: No. faces * (3 * ((No. faces - 1)*3)) which is bounded by O(n^2)
 //calculate the other half of every edge, return -1 if any edge already has an other half or doesnt have one. if all is okay return 0
 //otherHalf is an out parameter
 int otherHalf(vector<int> &otherHalf, Header &hd, vector<int> &faceIndex)
