@@ -60,7 +60,7 @@ vector<Vert> parseCoords(Header &hd, istream &faceFile)
     return coords;
 }
 
-//parse the edge to / face index
+//parse the edge from / face index
 void parseEdgeTo(Header &hd, istream &faceFile, vector<int> &outFaceIndex)
 {
     vector<int> edgeTo(hd.faces * 3);
