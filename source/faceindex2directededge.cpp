@@ -154,7 +154,7 @@ int getPrevious(int index)
 }
 
 //time complexity: No. unique verts * number of edges + incident edges on unique vertex O(uv*(e + i)) = O(n^2)
-// calculate the pinch point if there is one, return NULL if none or the vertex which is in a pinch point
+// calculate the pinch point if there is one, return true if none return false store the vertex pinch point in errorVert out parameter
 bool pinchPoints(vector<Vert> &verts, vector<int> faceIndex, vector<int> &firstEdge, vector<int> &otherHalf, int &errorVert)
 {
     for (int vertex = 0; vertex < verts.size(); vertex++)
