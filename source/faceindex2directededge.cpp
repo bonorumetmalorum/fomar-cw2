@@ -35,7 +35,6 @@ Header parseHeader(ifstream &faceFile)
     sscanf(name.c_str(), "# Object Name: %s", hd.object_name);
     string verticesAndFaces;
     getline(faceFile, verticesAndFaces);
-    cout << hd.object_name << endl;
     sscanf(verticesAndFaces.c_str(), "# Vertices=%d Faces=%d", &hd.verts, &hd.faces);
     faceFile.ignore(2, '\n');
     return hd;
@@ -139,7 +138,6 @@ int genus(int v, int e, int f)
 int getPrevious(int index)
 {
     int value;
-    cout << index % 3 << endl;
     switch (index % 3)
     {
     case 0:                //first edge of face
@@ -152,7 +150,6 @@ int getPrevious(int index)
         value = index - 1; //previous edge is second edge of face
         break;
     }
-    cout << value << endl;
     return value;
 }
 
@@ -171,21 +168,16 @@ bool pinchPoints(vector<Vert> &verts, vector<int> faceIndex, vector<int> &firstE
                 sumOccurence++; //increment since this edge starts with it
             }
         }
-        cout << "occurences of vertex " << vertex << ": " << sumOccurence << endl;
         int first = firstEdge[vertex];
         int currentEdge = first; //find first edge index
         int nextEdge = getPrevious(currentEdge);
         int counter = 1;
-        cout << currentEdge << nextEdge << otherHalf[nextEdge] << endl;
         while (otherHalf[nextEdge] != first)
         { //while there are more edges to cycle through
-            cout << "First edge: " << first << endl;
-            cout << "currentEdge: " << currentEdge << " nextEdge: " << nextEdge << endl;
             currentEdge = otherHalf[nextEdge]; //find other side of last edge to get first edge of next face
             nextEdge = getPrevious(currentEdge);
             counter++; //increment the counter since we have not reached the end of the cycle
         }
-        cout << "count: " << counter << endl;
         if (counter < sumOccurence)
         { // if this number is less than the number of edges containg this vertex, we have a pinch point
             errorVert = vertex;
@@ -255,7 +247,6 @@ int main(int argc, char **argv)
 
     vector<int> faceIndex;
     parseEdgeTo(hd, faceFile, faceIndex);
-    cout << faceIndex.size() << endl;
 
     vector<int> firstEdge(hd.verts);
     //time complexity: O(unique vertices * number of vertices) = O(n)
@@ -296,7 +287,7 @@ int main(int argc, char **argv)
     compileOtherHalfBlock(diredge, outOtherHalf); //put the other half block in
     diredge.close();                              //end
 
-    cout << "genus of mesh is: " << genus(hd.verts, (hd.faces * 3) / 2, hd.faces);
+    cout << "genus of mesh is: " << genus(hd.verts, (hd.faces * 3) / 2, hd.faces) << endl;
 
     return 0;
 }
