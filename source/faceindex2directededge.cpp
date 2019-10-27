@@ -61,7 +61,7 @@ vector<Vert> parseCoords(Header &hd, istream &faceFile)
 }
 
 //parse the edge from / face index
-void parseEdgeTo(Header &hd, istream &faceFile, vector<int> &outFaceIndex)
+void parseEdgeFrom(Header &hd, istream &faceFile, vector<int> &outFaceIndex)
 {
     vector<int> edgeTo(hd.faces * 3);
     string buf;
@@ -246,7 +246,7 @@ int main(int argc, char **argv)
     vector<Vert> coords = parseCoords(hd, faceFile);
 
     vector<int> faceIndex;
-    parseEdgeTo(hd, faceFile, faceIndex);
+    parseEdgeFrom(hd, faceFile, faceIndex);
 
     vector<int> firstEdge(hd.verts);
     //time complexity: O(unique vertices * number of vertices) = O(n)
