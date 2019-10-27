@@ -4,30 +4,41 @@
 
 using namespace std;
 
-struct Vert{
+struct Vert
+{
     float x = 0;
     float y = 0;
     float z = 0;
 };
 
 //returns true if two verts are equal, false otherwise
-bool compareVert(Vert &left, Vert &right){
+bool compareVert(Vert &left, Vert &right)
+{
     return left.x == right.x && left.y == right.y && left.z == right.z;
 }
 
 //time complexity: O(n)
 //returns the index of the matching vertex, otherwise -1
-int findVertex(Vert &vertex, vector<Vert> &verts){
+int findVertex(Vert &vertex, vector<Vert> &verts)
+{
     int size = verts.size();
-    for(int i = 0; i < size; i++){
-        if(compareVert(vertex, verts[i])){
+    for (int i = 0; i < size; i++)
+    {
+        if (compareVert(vertex, verts[i]))
+        {
             return i;
         }
     }
     return -1;
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
+    if (argc <= 2)
+    {
+        cout << "please input both the file and the output file name" << endl;
+        return -1;
+    }
     //read the file
     ifstream triangleSoup;
     triangleSoup.open(argv[1]);
@@ -36,7 +47,7 @@ int main(int argc, char **argv){
     triangleSoup >> nTriangles;
     cout << "number of traingles in file: " << nTriangles << endl;
     //number fo vertices
-    long nVertices = 3*nTriangles;
+    long nVertices = 3 * nTriangles;
     //index of vertices
     vector<Vert> vertices;
     //faces index
@@ -44,16 +55,20 @@ int main(int argc, char **argv){
 
     //Vertex variable
     Vert vert;
-    
+
     //time complexity: O(n^2)
-    for(int i = 0; i < nVertices; i++){
+    for (int i = 0; i < nVertices; i++)
+    {
         triangleSoup >> vert.x >> vert.y >> vert.z;
         //check if the vertex is already in the array
         int index = findVertex(vert, vertices);
-        if(index == -1){// if it is not then add at the end and add its index to the faces array
+        if (index == -1)
+        { // if it is not in the array then add it at the end and add its index to the faces array
             vertices.push_back(vert);
-            faces.push_back(vertices.size()-1);
-        }else{//if it does exist then add its index to the faces array
+            faces.push_back(vertices.size() - 1);
+        }
+        else
+        { //if it does exist then add its index to the faces array
             faces.push_back(index);
         }
     }
@@ -66,18 +81,21 @@ int main(int argc, char **argv){
     faceFile.open(filename);
     //header content
     faceFile << "# University of Leeds 2018-2019" << endl
-    << "# COMP 5812M Assignment 2" << endl
-    << "# Govind Venkatesh" << endl
-    << "# 201332107" << endl
-    << "#" << endl
-    << "# Object Name: " << argv[2] << endl
-    << "# Vertices=" << vertices.size() << " " << "Faces=" << faces.size()/3 << endl
-    << "#" << endl;
-    for(int i = 0; i < vertices.size(); i++){
-        faceFile << "Vertex " << i << " " << vertices[i].x << " " << vertices[i].y << " " <<  vertices[i].z << endl;
+             << "# COMP 5812M Assignment 2" << endl
+             << "# Govind Venkatesh" << endl
+             << "# 201332107" << endl
+             << "#" << endl
+             << "# Object Name: " << argv[2] << endl
+             << "# Vertices=" << vertices.size() << " "
+             << "Faces=" << faces.size() / 3 << endl
+             << "#" << endl;
+    for (int i = 0; i < vertices.size(); i++)
+    {
+        faceFile << "Vertex " << i << " " << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << endl;
     }
-    for(int j = 0; j < faces.size(); j+=3){
-        faceFile << "Face " << j/3 << " " << faces[j] << " " << faces[j+1] << " " << faces[j+2] << endl;
+    for (int j = 0; j < faces.size(); j += 3)
+    {
+        faceFile << "Face " << j / 3 << " " << faces[j] << " " << faces[j + 1] << " " << faces[j + 2] << endl;
     }
     faceFile.close();
 }
